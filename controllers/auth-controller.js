@@ -17,31 +17,20 @@ let getToken = (headers) => {
     }
 };
 
+
+
 module.exports = ({config}) => {
     return {
         registerUser(req, res) {
             const body = req.body;
             console.log(body.username);
-            User.findOne({ username: body.username }, (err, user) => {
-                if (err) {
-                    res.json("error");
-                }
 
-                if (user) {
-                    res.json("user already exists");
-                } else {
-                    console.log(body.password);
-                    const newUser = new User({
-                        username: body.username,
-                        password: body.password
-                    });
-
-                    newUser.save((err, user) => {
+            const create = (newUser) => {
+                       User.create(newUser, (err, user) => {
                         if(err) {
                             res.statusMessage = "error";
                             res.sendStatus(404).end();
                         } else {
-                            console.log(user.password);
                             let result = {
                                 username: user.username,
                                 password: user.password,
@@ -51,7 +40,21 @@ module.exports = ({config}) => {
                             res.json({ result })
                         }
                     });
+            }
 
+            User.findOne({ username: body.username }, (err, user) => {
+                if (err) {
+                    res.json("error");
+                }
+
+                if (user) {
+                    res.json("user already exists");
+                } else {
+                    const newUser ={
+                        username: body.username,
+                        password: body.password
+                    };
+                    create(newUser);
                     // User.create(body, (err, newUser) => {
                     //     if (err) {
                     //         res.statusMessage = "Unable to parse information";
