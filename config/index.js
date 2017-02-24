@@ -6,7 +6,7 @@ const roothPath = path.join(__dirname, '/../');
 
 const connectionStrings = {
     production: process.env.production,
-    development: "mongodb://localhost:27017:androidDb"
+    development: "mongodb://androiddbserver:android1@ds161179.mlab.com:61179/tvshow-server"
 }
 
 module.exports = {
